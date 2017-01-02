@@ -1,0 +1,90 @@
+{% extends "base.html" %}
+
+{% block title %}{{post.subject}}{% endblock %}
+
+{% block header %}
+    <!-- Page Header -->
+    <!-- Set your background image for this header on the line below. -->
+    <header class="intro-header" style="background-image: url('/static/img/post-bg.jpg')">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                    <div class="post-heading">
+                        <h1>{{post.subject}}</h1>
+                        <span class="meta">Posted by <a href="#">{{post.user.name}}</a> {{post.created.strftime("%b %d, %Y")}}</span>
+                    </div>
+                </div>
+                {% if user and post.user.key().id() == user.key().id() %}
+
+                  <form action="/blog/{{post.key().id()}}/edit">
+                    <div class="form-group col-xs-2">
+                      <button type="submit" class="btn btn-default">Edit</button>
+                      </div>
+                  </form>
+
+
+                  <form action="/blog/{{post.key().id()}}/delete">
+                    <div class="form-group col-xs-2">
+                    <button type="submit" class="btn btn-default btn-delete">Delete</button>
+                    </div>
+                  </form>
+
+                {% endif %}
+            </div>
+
+        </div>
+    </header>
+{% endblock %}
+    <!-- Post Content -->
+{% block content%}
+    <article>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                  {{post._render_text | safe}}
+                </div>
+            </div>
+        </div>
+    </article>
+
+    <hr>
+      <div class="container">
+          <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-8 col-md-offset-2">
+
+                <div class="row control-group">
+                  {% if comments.get() %}
+                  <div class="col-xs-12">
+                      <h4>Comments</h4>
+                      <hr>
+                      {% for comment in comments %}
+                        {{ comment.render(post, user) | safe }}
+                      {% endfor %}
+                  </div>
+                  {% endif %}
+                </div>
+              {% if user %}
+              <form action="/blog/new_comment" method="post">
+                  <input type="hidden" name="post_id" value="{{ post.key().id() }}">
+                  <div class="row control-group">
+                    <div class="form-group col-xs-12 floating-label-form-group controls">
+                    <label>Comment</label>
+                    <textarea rows="3" class="form-control" placeholder="Comment" name="comment">{{comment}}</textarea>
+                    <p class="help-block text-danger">{{error_comment}}</p>
+                    </div>
+                  </div>
+                  <br>
+                  <div class="row">
+                    <div class="form-group col-xs-12">
+                        <button type="submit" class="btn btn-default" value="comment">Comment</button>
+                    </div>
+                  </div>
+              </form>
+              {% else %}
+                <p> no user </p>
+              {% endif %}
+            </div>
+
+          </div>
+      </div>
+{% endblock %}

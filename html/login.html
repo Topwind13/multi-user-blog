@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+
+{% block title %}New Post Form{% endblock %}
+
+{% block header %}
+    <!-- Page Header -->
+    <!-- Set your background image for header. -->
+    <header class="intro-header" style="background-image: url('/static/img/about-bg.jpg')">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                    <div class="page-heading">
+                        <h1>LOGIN</h1>
+                        <hr class="small">
+                        <h2 class="subheading">Please login</h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+{% endblock %}
+    <!-- Post Content -->
+{% block content%}
+    <article>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+
+                  <div class="text-danger" role="alert">
+                    {{ error }}
+                  </div>
+
+                  <form method="post" novalidate>
+                      <div class="row control-group">
+                          <div class="form-group col-xs-12 floating-label-form-group controls">
+                              <label>Username</label>
+                              <input type="text" class="form-control" placeholder="Username" name="username" value="{{username}}">
+                          </div>
+                      </div>
+                      <div class="row control-group">
+                          <div class="form-group col-xs-12 floating-label-form-group controls">
+                              <label>Password</label>
+                              <input type="password" class="form-control" placeholder="Password" name="pwd" value="">
+                          </div>
+                      </div>
+                      <div class="row control-group">
+                          <div class="form-group col-xs-12 control">
+                              <label>
+                              <input type="checkbox"  name="remember" value="remember">
+                              <span class="remember">Remember Me</span>
+                              </label>
+                          </div>
+                      </div>
+                      <!-- <div class="row control-group">
+                        <p class="help-block text-danger">{{error}}</p>
+                      </div> -->
+
+                      <div class="row">
+                          <div class="form-group col-xs-12">
+                              <button type="submit" class="btn btn-default" value="post">Login</button>
+                          </div>
+                      </div>
+                  </form>
+
+                </div>
+            </div>
+        </div>
+    </article>
+
+    <hr>
+{% endblock %}

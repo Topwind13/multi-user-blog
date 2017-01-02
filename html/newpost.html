@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+
+{% block title %}New Post Form{% endblock %}
+
+{% block header %}
+    <!-- Page Header -->
+    <!-- Set your background image for this header on the line below. -->
+    <header class="intro-header" style="background-image: url('/static/img/post-bg.jpg')">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                    <div class="page-heading">
+                        <h1>New Post</h1>
+                        <hr class="small">
+                        <h2 class="subheading">Create your own post</h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+{% endblock %}
+    <!-- Post Content -->
+{% block content%}
+    <article>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <!-- <p>Write your exellent post with awesome ideas!</p> -->
+                  <form method="post" novalidate>
+                      <div class="row control-group">
+                          <div class="form-group col-xs-12 floating-label-form-group controls">
+                              <label>Subject</label>
+                              <input type="text" class="form-control" placeholder="Subject" name="subject" value="{{subject}}">
+                                <p class="help-block text-danger">{{error_subject}}</p>
+                          </div>
+                      </div>
+
+                      <div class="row control-group">
+                          <div class="form-group col-xs-12 floating-label-form-group controls">
+                              <label>Content</label>
+                              <textarea rows="7" class="form-control" placeholder="Content" name="content">{{content}}</textarea>
+                              <p class="help-block text-danger">{{error_content}}</p>
+                          </div>
+                      </div>
+                      <br>
+                      <div class="row">
+                          <div class="form-group col-xs-12">
+                              <button type="submit" class="btn btn-default" value="post">Send</button>
+                          </div>
+                      </div>
+                  </form>
+
+                </div>
+            </div>
+        </div>
+    </article>
+
+    <hr>
+{% endblock %}

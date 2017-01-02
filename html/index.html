@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+
+{% block title %} Multi user blog project {% endblock %}
+
+{% block header %}
+<!-- Page Header -->
+<!-- Set your background image for header. -->
+<header class="intro-header" style="background-image: url('/static/img/home-bg.jpg')">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="site-heading">
+                    <h1>{% block name %}{% endblock %}</h1>
+                    <hr class="small">
+                    <span class="subheading">{% block subheading %}{% endblock %}</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+{% endblock %}
+
+{% block content %}
+<!-- Main Content -->
+<div class="container">
+    <div class="row">
+        <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+          {% if posts %}
+            {% for post in posts %}
+              {{ post.render() | safe }}
+              <br>
+            {% endfor %}
+          {% else %}
+            <div class="text-center">
+              --  No post exist  --
+            </div>
+          {% endif %}
+            <!-- Pager -->
+            <ul class="pager">
+                <li class="previous">
+                  {% if page > 1 %}
+                  <a href="/blog?page={{ page - 1 }}">Newer Post</a>
+                  {% endif %}
+                </li>
+                <li class="next">
+                  {% if page < total_pages %}
+                  <a href="/blog?page={{ page + 1 }}">Older Posts</a>
+                  {% endif %}
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+{% endblock %}

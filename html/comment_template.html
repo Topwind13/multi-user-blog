@@ -1,0 +1,45 @@
+<!-- comment template file -->
+
+<div class="post-preview">
+    <!-- render all comments from database -->
+    <div class="comment" id="comment_content_{{comment.key().id()}}">
+      <p class="post-content">
+          {{comment._render_text | safe}}
+      </p>
+
+      <!-- the edit and delete commment buttons will be existed if the login user post that comment -->
+      
+      {% if user and comment.user.key().id() == user.key().id() %}
+      <button class="edit-btn" id="{{comment.key().id()}}" type="button" name="button">Edit</button>
+      <form action="/blog/delete_comment/{{comment.key().id()}}" method="post">
+        <div class="comment">
+          <button class="btn-delete"type="summit" name="button">Delete</button>
+        </div>
+      </form>
+      {% endif %}
+      <p class="post-meta">Commented by <a href="#">{{comment.user.name.title()}}</a> on {{comment.created.strftime("%a, %d-%b-%Y %T")}}</p>
+    </div>
+
+    <!-- edit comment form -->
+
+    <div class="edit-form" id="edit_form_{{comment.key().id()}}">
+      <form action="/blog/edit_comment" method="post">
+          <input type="hidden" name="comment_id" value="{{ comment.key().id() }}">
+          <input type="hidden" name="post_id" value="{{ post.key().id() }}">
+          <div class="row control-group">
+            <div class="form-group col-xs-12 floating-label-form-group controls">
+              <label>Edit Comment</label>
+              <textarea rows="5" class="form-control lable" placeholder="Comment" name="content">{{ comment.content | safe }}</textarea>
+              <p class="help-block text-danger">{{error_comment}}</p>
+            </div>
+          </div>
+          <br>
+          <div class="row">
+            <div class="form-group col-xs-12">
+                <button type="submit" class="btn btn-default btn-reduce" value="comment">Comment</button>
+            </div>
+          </div>
+      </form>
+    </div>
+</div>
+<hr>

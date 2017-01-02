@@ -1,0 +1,12 @@
+<div class="post-preview">
+    <a href="/blog/{{ post.key().id() }}">
+        <h2 class="post-title">
+            {{post.subject}}
+        </h2>
+        <p class="post-content">
+          {{post._render_text | safe}}
+        </p>
+    </a>
+    <p class="post-meta">Posted by <a href="#">{{post.user.name}}</a> on {{post.created.strftime("%b %d, %Y")}}</p>
+</div>
+<hr>

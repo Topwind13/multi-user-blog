@@ -1,0 +1,47 @@
+.text-danger {
+    color: #a94442;
+    margin-bottom: 0.5em;
+}
+
+.remember {
+  font-size: 14px;
+  color: #444;
+  margin-bottom: 0;
+  padding-bottom: 0.5em;
+}
+
+.comment > .post-content {
+  margin: 0.5em 0;
+  font-size: 16px;
+}
+
+.comment > .post-meta {
+  font-size: 12px;
+}
+
+.edit-form{
+  display: none
+}
+
+.comment > button {
+     background:none;
+     border:none;
+     font: inherit;
+     font-size: 12px;
+     text-decoration: underline;
+     color: #333333;
+     float: right;
+}
+.comment > button:hover,
+.comment > button:focus {
+       color: #0085A1;
+}
+
+.comment > p {
+  margin: 5px auto;
+}
+
+.btn-reduce {
+  font-size: 12px;
+  padding: 5px 7px;
+}
