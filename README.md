@@ -11,7 +11,7 @@ Multi User Blog is the project which is a part of [Udacity Full Stack Web Develo
 * Goole App Engine
 
 ## Features
-* [live version](https://multi-user-blog-154507.appspot.com/blog)
+* [live version](https://multi-user-blog-154519.appspot.com/blog)
 * Front page that lists blog posts.
 * A form to submit new entries.
 * Blog posts have their own page.
@@ -36,9 +36,9 @@ If you've already installed them, clone the repo and run the project
     $ cd multi-user-blog
     $ dev_appserver.py .
 
-you can visit the application at this URL: http://localhost:8080/.
+you can visit the application at this URL: `http://localhost:8080`.
 
-and access to database at this URL: http://localhost:8000/datastore.
+and access to database at this URL: `http://localhost:8000/datastore`.
 
 you can quit your localhost: `ctrl+c`
 
