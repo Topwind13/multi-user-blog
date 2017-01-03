@@ -721,7 +721,12 @@ class Logout(Handler):
         self.logout()
         self.redirect('/blog/login')
 
-app = webapp2.WSGIApplication([('/blog/?', BlogPage),
+class MainPage(Handler):
+    def get(self):
+        self.redirect('/blog')
+
+app = webapp2.WSGIApplication([('/', MainPage)
+                               ('/blog/?', BlogPage),
                                ('/blog/newpost', NewPostPage),
                                ('/blog/mypost', MyPostPage),
                                ('/blog/([0-9]+)', PostPage),
