@@ -11,7 +11,9 @@ from functools import wraps
 import time
 
 template_dir = os.path.join(os.path.dirname(__file__), 'html')
-jinja_env = jinja2.Environment(loader = jinja2.FileSystemLoader(template_dir), autoescape = True)
+jinja_env = jinja2.Environment(loader=jinja2.FileSystemLoader(template_dir),
+                               autoescape=True)
+
 
 def render_str(template, **params):
     """Render jinja template with parameters to html string.
@@ -27,13 +29,15 @@ def render_str(template, **params):
     template_jinja = jinja_env.get_template(template)
     return template_jinja.render(params)
 
+
 def render_post(response, post):
     """Function to write out post subject and content"""
 
     response.out.write('<b>' + post.subject + '</b><br>')
     response.out.write(post.content)
 
-## login
+
+# login
 def login_required(function):
     """Decorator function for login required pages."""
 
@@ -45,7 +49,9 @@ def login_required(function):
             return self.redirect('/blog/login')
         return function(self, *args, **kw)
     return wrapper
-## Handler
+
+
+# ## Handler ##
 class Handler(webapp2.RequestHandler):
     """A base blog handler class provides functions used in the pages"""
 
@@ -75,16 +81,18 @@ class Handler(webapp2.RequestHandler):
         Args:
             name (str): cookie name.
             val (str): cookie value.
-            remember(str/boolean): the string value or false to set longer cookie.
+            remember(str/boolean): the string value or false
+            to set longer cookie.
         """
 
         cookie_val = make_secure_val(val)
         cookie_str = '%s=%s; Path=/;' % (name, cookie_val)
         if remember:
-            expires = time.time() + 5000 * 24 * 3600 # 5000 days from now
+            expires = time.time() + 5000 * 24 * 3600  # 5000 days from now
         else:
-            expires = time.time() +  24 * 3600
-        expires_str = time.strftime("%a, %d-%b-%Y %T GMT", time.gmtime(expires))
+            expires = time.time() + 24 * 3600
+        expires_str = time.strftime("%a, %d-%b-%Y %T GMT",
+                                    time.gmtime(expires))
         expires_date = 'expires= %s;' % expires_str
         cookie_str += expires_date
         self.response.headers.add_header('Set-Cookie', cookie_str)
@@ -96,7 +104,8 @@ class Handler(webapp2.RequestHandler):
             name (str): cookie name.
 
         Returns:
-            str or False: the cookie value if it valid, otherwise return 'false'
+            str or False: the cookie value if it valid,
+            otherwise return 'false'
         """
 
         cookie_val = self.request.cookies.get(name)
@@ -125,9 +134,9 @@ class Handler(webapp2.RequestHandler):
         uid = self.read_secure_cookie('user_id')
         self.user = uid and User.by_id(int(uid))
 
-
 # User
-secret = 'topp' # set the secret value
+secret = 'topp'  # set the secret value
+
 
 def hash_str(string):
     """hash string with secret value by hmac.
@@ -137,6 +146,7 @@ def hash_str(string):
     """
 
     return hmac.new(secret, string).hexdigest()
+
 
 def make_secure_val(string):
     """set string and hash that string for securation
@@ -149,6 +159,7 @@ def make_secure_val(string):
     """
 
     return "%s|%s" % (string, hash_str(string))
+
 
 def check_secure_val(hash_val):
     """Check the validation of hash value.
@@ -164,7 +175,8 @@ def check_secure_val(hash_val):
     if hash_val == make_secure_val(val):
         return val
 
-def make_salt(length = 5):
+
+def make_salt(length=5):
     """Random 5 digits of alphabet
 
     Args:
@@ -176,7 +188,8 @@ def make_salt(length = 5):
 
     return ''.join(random.choice(letters) for x in xrange(length))
 
-def make_pw_hash(name, pw, salt = None):
+
+def make_pw_hash(name, pw, salt=None):
     """Making hashed password
 
     Args:
@@ -193,6 +206,7 @@ def make_pw_hash(name, pw, salt = None):
     hash_pw = hashlib.sha256(name + pw + salt).hexdigest()
     return '%s,%s' % (salt, hash_pw)
 
+
 def valid_pw(name, pw, pw_hash):
     """valid whether password correct
 
@@ -208,10 +222,12 @@ def valid_pw(name, pw, pw_hash):
     salt = pw_hash.split(',')[0]
     return pw_hash == make_pw_hash(name, pw, salt)
 
+
 # Model
 
-## User model ##
-def users_key(group = 'default'):
+
+# ## User model ##
+def users_key(group='default'):
     """parent key of User modle
 
     Args:
@@ -223,8 +239,10 @@ def users_key(group = 'default'):
 
     return db.Key.from_path('users', group)
 
+
 class User(db.Model):
-    """A User class contains certain pieces of information of each user from the DB Model
+    """A User class contains certain pieces of information
+    of each user from the DB Model
 
     Attr:
         name (str): the username.
@@ -232,8 +250,8 @@ class User(db.Model):
         email (str): the email of user
 
     """
-    name = db.StringProperty(required = True)
-    pw_hash = db.StringProperty(required = True)
+    name = db.StringProperty(required=True)
+    pw_hash = db.StringProperty(required=True)
     email = db.StringProperty()
 
     @classmethod
@@ -247,7 +265,7 @@ class User(db.Model):
             return User instance if it exists, otherwise return 'None'
         """
 
-        return cls.get_by_id(uid, parent = users_key())
+        return cls.get_by_id(uid, parent=users_key())
 
     @classmethod
     def by_name(cls, name):
@@ -262,7 +280,7 @@ class User(db.Model):
         return cls.all().filter('name =', name).get()
 
     @classmethod
-    def register(cls, name, pw, email = None):
+    def register(cls, name, pw, email=None):
         """Make the User instance as provided infomation
 
         Args:
@@ -275,10 +293,10 @@ class User(db.Model):
         """
 
         pw_hash = make_pw_hash(name, pw)
-        return cls(parent = users_key(),
-                   name = name,
-                   pw_hash = pw_hash,
-                   email = email)
+        return cls(parent=users_key(),
+                   name=name,
+                   pw_hash=pw_hash,
+                   email=email)
 
     @classmethod
     def login(cls, name, pw):
@@ -295,9 +313,9 @@ class User(db.Model):
         if user and valid_pw(name, pw, user.pw_hash):
             return user
 
-## Post model ##
 
-def blog_key(name = 'default'):
+# ## Post model ##
+def blog_key(name='default'):
     """parent key of blog modle
 
     Args:
@@ -309,8 +327,10 @@ def blog_key(name = 'default'):
 
     return db.Key.from_path('blogs', name)
 
+
 class Post(db.Model):
-    """A Post class contains certain pieces of information of each post from the DB Model
+    """A Post class contains certain pieces of information
+    of each post from the DB Model
 
     Attr:
         user (User): the user.
@@ -320,19 +340,19 @@ class Post(db.Model):
     """
 
     user = db.ReferenceProperty(User, collection_name='posts', required=True)
-    subject = db.StringProperty(required = True)
-    content = db.TextProperty(required = True)
-    created = db.DateTimeProperty(auto_now_add = True)
+    subject = db.StringProperty(required=True)
+    content = db.TextProperty(required=True)
+    created = db.DateTimeProperty(auto_now_add=True)
 
     def render(self):
         """rander function to the page"""
 
         self._render_text = self.content.replace('\n', '<br>')
-        return render_str('post_template.html', post = self, user = self.user)
+        return render_str('post_template.html', post=self, user=self.user)
 
-## Comment model ##
 
-def comment_key(name = 'Post'):
+# ## Comment model ##
+def comment_key(name='Post'):
     """parent key of comment modle
 
     Args:
@@ -343,8 +363,10 @@ def comment_key(name = 'Post'):
     """
     return db.Key.from_path('comment', name)
 
+
 class Comment(db.Model):
-    """A Comment class contains certain pieces of information of each comment from the DB Model
+    """A Comment class contains certain pieces of information
+    of each comment from the DB Model
 
     Attr:
         user (User): the user.
@@ -353,20 +375,26 @@ class Comment(db.Model):
         created (datetime): created date and time of the post.
 
     """
-    user = db.ReferenceProperty(User, collection_name='comment_user_set', required=True)
-    post = db.ReferenceProperty(Post, collection_name='comment_post_set', required = True)
-    content = db.TextProperty(required = True)
-    created = db.DateTimeProperty(auto_now_add = True)
+    user = db.ReferenceProperty(User,
+                                collection_name='comment_user_set',
+                                required=True)
+    post = db.ReferenceProperty(Post,
+                                collection_name='comment_post_set',
+                                required=True)
+    content = db.TextProperty(required=True)
+    created = db.DateTimeProperty(auto_now_add=True)
 
     def render(self, post, user):
         """rander function to the page"""
 
         self._render_text = self.content.replace('\n', '<br>')
-        return render_str('comment_template.html', comment = self, post = post, user = user)
+        return render_str('comment_template.html',
+                          comment=self,
+                          post=post,
+                          user=user)
 
 
-
-## blog post Handler ##
+# ## blog post Handler ##
 class BlogPage(Handler):
     """Blog Main page handler"""
 
@@ -389,8 +417,9 @@ class BlogPage(Handler):
         if number_posts % limit:
             total_pages += 1
 
-        self.render('home.html', posts = posts, page=page,
-                    total_pages=total_pages, user = self.user)
+        self.render('home.html', posts=posts, page=page,
+                    total_pages=total_pages, user=self.user)
+
 
 class MyPostPage(Handler):
     """list of posts page of login user handler"""
@@ -418,8 +447,9 @@ class MyPostPage(Handler):
             total_pages += 1
 
         posts = my_posts.fetch(limit=limit, offset=offset)
-        self.render('mypost.html', posts = posts, page=page,
-                    total_pages=total_pages, user = self.user)
+        self.render('mypost.html', posts=posts, page=page,
+                    total_pages=total_pages, user=self.user)
+
 
 class NewPostPage(Handler):
     """New post page handler"""
@@ -428,7 +458,7 @@ class NewPostPage(Handler):
     def get(self):
         """render new post form"""
 
-        self.render("newpost.html", user = self.user)
+        self.render("newpost.html", user=self.user)
 
     @login_required
     def post(self):
@@ -449,11 +479,20 @@ class NewPostPage(Handler):
             have_errors = True
 
         if have_errors:
-            self.render("newpost.html", subject = subject, content = content, error_subject = error_subject, error_content = error_content, user = self.user)
+            self.render("newpost.html",
+                        subject=subject,
+                        content=content,
+                        error_subject=error_subject,
+                        error_content=error_content,
+                        user=self.user)
         else:
-            post = Post(parent = blog_key(), subject = subject, content = content, user = self.user)
+            post = Post(parent=blog_key(),
+                        subject=subject,
+                        content=content,
+                        user=self.user)
             post.put()
             self.redirect('/blog/%s' % str(post.key().id()))
+
 
 class PostPage(Handler):
     """Post page handler"""
@@ -469,12 +508,13 @@ class PostPage(Handler):
             self.error(404)
             return
 
-        #comment query object
+        # comment query object
         comments = Comment.all().filter('post =', post).order('created')
 
         # break a line of content and rander a post to post page
         post._render_text = post.content.replace('\n', '<br>')
-        self.render('post.html', post = post, user = self.user, comments = comments)
+        self.render('post.html', post=post, user=self.user, comments=comments)
+
 
 class EditPostPage(Handler):
     """Edit post page handler"""
@@ -484,13 +524,12 @@ class EditPostPage(Handler):
         """get post's id and rander it to edit page of that post
         Args:
             post_id (str): Post's id
-
         """
 
         post = Post.get_by_id(int(post_id), parent=blog_key())
 
         if post and self.user.key().id() == post.user.key().id():
-            self.render("edit.html", post = post, user = self.user)
+            self.render("edit.html", post=post, user=self.user)
         else:
             self.redirect('/blog/%s' % str(post.key().id()))
 
@@ -503,25 +542,44 @@ class EditPostPage(Handler):
         """
         post = Post.get_by_id(int(post_id), parent=blog_key())
 
-        post.subject = self.request.get('subject')
-        post.content = self.request.get('content')
+        if post and self.user.key().id() == post.user.key().id():
+            post.subject = self.request.get('subject')
+            post.content = self.request.get('content')
 
-        # initialize error to false
-        have_errors = False
+            # initialize error to false
+            have_errors = False
 
-        # if there is no subject or content, it will throw errors
-        if not post.subject:
-            error_subject = "Please write down the subject"
-            have_errors = True
-        if not post.content:
-            error_content = "Content is required"
-            have_errors = True
+            # if there is no subject or content, it will throw errors
+            if not post.subject:
+                error_subject = "Please write down the subject"
+                have_errors = True
+            if not post.content:
+                error_content = "Content is required"
+                have_errors = True
 
-        if have_errors:
-            self.render("edit.html", subject = post.subject, content = post.content, error_subject = error_subject, error_content = error_content, user = self.user)
-        else:
-            post.put()
-            self.redirect('/blog/%s' % str(post.key().id()))
+            if have_errors:
+                self.render("edit.html",
+                            subject=post.subject,
+                            content=post.content,
+                            error_subject=error_subject,
+                            error_content=error_content,
+                            user=self.user)
+            else:
+                post.put()
+                self.redirect('/blog/%s' % str(post.key().id()))
+
+
+class CancelEdit(Handler):
+    """Cancel edit post page handler"""\
+
+    def get(self, post_id):
+        """get post's id and rander it to post page
+        Args:
+            post_id (str): Post's id
+        """
+        post = Post.get_by_id(int(post_id), parent=blog_key())
+        self.redirect('/blog/%s' % str(post.key().id()))
+
 
 class DeletePost(Handler):
     """Delete post page handler"""
@@ -543,7 +601,8 @@ class DeletePost(Handler):
         time.sleep(0.2)
         self.redirect('/blog')
 
-## Comment Handler ##
+
+# ## Comment Handler ##
 class NewComment(Handler):
     """New comment handler"""
 
@@ -551,15 +610,19 @@ class NewComment(Handler):
     def post(self):
         """summit a comment to DB and rander it the post page"""
         post_id = self.request.get('post_id')
-        post = Post.get_by_id(int(post_id), parent = blog_key())
+        post = Post.get_by_id(int(post_id), parent=blog_key())
         content = self.request.get('comment')
 
         if content:
-            comment = Comment(parent = comment_key(), content = content, user = self.user, post = post)
+            comment = Comment(parent=comment_key(),
+                              content=content,
+                              user=self.user,
+                              post=post)
             comment.put()
 
         time.sleep(0.1)
         self.redirect('/blog/%s' % str(post.key().id()))
+
 
 class EditComment(Handler):
     """Edit comment handler"""
@@ -570,41 +633,47 @@ class EditComment(Handler):
         comment_id = self.request.get('comment_id')
         post_id = self.request.get('post_id')
         comment = Comment.get_by_id(int(comment_id), parent=comment_key())
-        post = Post.get_by_id(int(post_id), parent = blog_key())
-        comment.content = self.request.get('content')
+        post = Post.get_by_id(int(post_id), parent=blog_key())
+        if comment and self.user.key().id() == comment.user.key().id():
+            comment.content = self.request.get('content')
 
-        have_errors = False
+            have_errors = False
 
-        if not comment.content:
-            error_content = "Content is required"
-            have_errors = True
+            if not comment.content:
+                error_content = "Content is required"
+                have_errors = True
 
-        if have_errors:
-            self.render("edit_comment.html", comment = comment, error_content = error_content, user = self.user)
-        else:
-            comment.put()
-            time.sleep(0.1)
-            self.redirect('/blog/%s' % str(post.key().id()))
+            if have_errors:
+                self.render("edit_comment.html",
+                            comment=comment,
+                            error_content=error_content,
+                            user=self.user)
+            else:
+                comment.put()
+                time.sleep(0.1)
+
+        self.redirect('/blog/%s' % str(post.key().id()))
+
 
 class DeleteComment(Handler):
     """Delete comment handler"""
 
     @login_required
-    def post(self,comment_id):
+    def post(self, comment_id):
         """delete new post from DB
         Args:
             comment_id (str): Comment's id
 
         """
         comment = Comment.get_by_id(int(comment_id), parent=comment_key())
-        # if comment and self.user.key().id() == comment.user.key().id():
-        comment.delete()
-        time.sleep(0.1)
+        if comment and self.user.key().id() == comment.user.key().id():
+            comment.delete()
+            time.sleep(0.1)
 
         self.redirect('/blog/%s' % str(comment.post.key().id()))
 
 
-## Sign up Handler ##
+# ## Sign up Handler ##
 class Signup(Handler):
     """ sign up page handler"""
 
@@ -621,8 +690,8 @@ class Signup(Handler):
         self.verify_pwd = self.request.get('verify_pwd')
         self.email = self.request.get('email')
         have_errors = False
-        params = dict(username = self.username,
-                      email = self.email)
+        params = dict(username=self.username,
+                      email=self.email)
         if not valid_username(self.username):
             params['error_username'] = "That's not a valid username"
             have_errors = True
@@ -649,7 +718,8 @@ class Signup(Handler):
 
             self.login(user)
             welcome_msg = 'Welcome, %s' % (self.username)
-            self.redirect('/blog?welcome_msg=%s' %(welcome_msg))
+            self.redirect('/blog?welcome_msg=%s' % (welcome_msg))
+
 
 def valid_username(username):
     """validation of username
@@ -664,6 +734,7 @@ def valid_username(username):
     RE = re.compile(r"^[a-zA-Z0-9_-]{3,20}$")
     return RE.match(username)
 
+
 def valid_pwd(pwd):
     """validation of password
 
@@ -675,6 +746,7 @@ def valid_pwd(pwd):
     """
     RE = re.compile(r"^.{3,20}$")
     return RE.match(pwd)
+
 
 def valid_email(email):
     """validation of email
@@ -688,7 +760,8 @@ def valid_email(email):
     RE = re.compile(r"^[\S]+@[\S]+.[\S]+$")
     return RE.match(email)
 
-## Login Handler ##
+
+# ## Login Handler ##
 class Login(Handler):
     """Login handler"""
     def get(self):
@@ -704,14 +777,14 @@ class Login(Handler):
         pwd = self.request.get('pwd')
         remember = self.request.get('remember')
 
-
-        user = User.login(username, pwd) # class
+        user = User.login(username, pwd)  # class
         if user:
-            self.login(user, remember) # cookie
+            self.login(user, remember)  # cookie
             self.redirect('/blog')
         else:
             msg = 'Invalid login'
-            self.render("login.html", error = msg)
+            self.render("login.html", error=msg)
+
 
 class Logout(Handler):
     """Logout handler"""
@@ -721,7 +794,9 @@ class Logout(Handler):
         self.logout()
         self.redirect('/blog/login')
 
+
 class MainPage(Handler):
+    """MainPage handler"""
     def get(self):
         self.redirect('/blog')
 
@@ -732,6 +807,7 @@ app = webapp2.WSGIApplication([('/', MainPage),
                                ('/blog/([0-9]+)', PostPage),
                                ('/blog/([0-9]+)/delete', DeletePost),
                                ('/blog/([0-9]+)/edit', EditPostPage),
+                               ('/blog/([0-9]+)/cancel_edit', CancelEdit),
                                ('/blog/new_comment', NewComment),
                                ('/blog/edit_comment', EditComment),
                                ('/blog/delete_comment/([0-9]+)', DeleteComment),
@@ -739,4 +815,4 @@ app = webapp2.WSGIApplication([('/', MainPage),
                                ('/blog/login', Login),
                                ('/blog/logout', Logout),
                                ],
-                              debug = True)
+                              debug=True)
