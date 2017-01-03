@@ -5,8 +5,9 @@ threadsafe: True
 handlers:
 - url: /static
   static_dir: static
+
 - url: /.*
-  script: blog.app
+  script: main.app
 
 libraries:
 - name: jinja2
