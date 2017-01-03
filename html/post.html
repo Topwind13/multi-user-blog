@@ -12,6 +12,7 @@
                     <div class="post-heading">
                         <h1>{{post.subject}}</h1>
                         <span class="meta">Posted by <a href="#">{{post.user.name}}</a> {{post.created.strftime("%b %d, %Y")}}</span>
+                        <span class="like"> {{total_like}} like{% if total_like > 1 %}s{% endif %}</span>
                     </div>
                 </div>
                 {% if user and post.user.key().id() == user.key().id() %}
@@ -30,7 +31,25 @@
                   </form>
 
                 {% endif %}
+                {% if user and post.user.key().id() != user.key().id() %}
+                  {% if not like %}
+                    <form action="/blog/like" method="post">
+                      <input type="hidden" name="post_id" value="{{ post.key().id() }}">
+                      <div class="form-group col-xs-2">
+                        <button type="submit" class="btn btn-default">Like</button>
+                      </div>
+                    </form>
+                  {% else %}
+                    <form action="/blog/unlike" method="post">
+                      <input type="hidden" name="like_id" value="{{ like.key().id() }}">
+                      <div class="form-group col-xs-2">
+                        <button type="submit" class="btn btn-default">Unlike</button>
+                      </div>
+                    </form>
+                  {% endif %}
+                {% endif %}
             </div>
+
 
         </div>
     </header>

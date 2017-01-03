@@ -45,3 +45,13 @@
   font-size: 12px;
   padding: 5px 7px;
 }
+
+.like{
+  color: #fff;
+  padding: 10px 0;
+  font-weight: 800;
+  float: left;
+  height: 70px;
+  font-size: 18px;
+  line-height: 20px;
+}

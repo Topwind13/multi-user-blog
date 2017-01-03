@@ -5,6 +5,8 @@ from handlers.handler import Handler
 from models.post import Post, blog_key
 from models.comment import Comment, comment_key
 from handlers.userHandlerFunction import login_required
+from models.like import Like, like_key
+from handlers.likeHandler import count_like
 
 
 
@@ -124,10 +126,12 @@ class PostPage(Handler):
 
         # comment query object
         comments = Comment.all().filter('post =', post).order('created')
+        like = Like.all().filter('post =', post).filter('user =', self.user).get()
+        total_like = count_like(post)
 
         # break a line of content and rander a post to post page
         post._render_text = post.content.replace('\n', '<br>')
-        self.render('post.html', post=post, user=self.user, comments=comments)
+        self.render('post.html', post=post, user=self.user, comments=comments, like=like, total_like=total_like)
 
 
 class EditPostPage(Handler):

@@ -5,6 +5,7 @@ from handlers.handler import Handler
 from handlers.postHandler import BlogPage, NewPostPage, MyPostPage, PostPage, DeletePost, EditPostPage, CancelEdit
 from handlers.commentHandler import NewComment, EditComment, DeleteComment
 from handlers.userAuthHandler import Signup, Login, Logout
+from handlers.likeHandler import NewLike, Unlike
 
 
 class MainPage(Handler):
@@ -23,6 +24,8 @@ app = webapp2.WSGIApplication([('/', MainPage),
                                ('/blog/new_comment', NewComment),
                                ('/blog/edit_comment', EditComment),
                                ('/blog/delete_comment/([0-9]+)', DeleteComment),
+                               ('/blog/like', NewLike),
+                               ('/blog/unlike', Unlike),
                                ('/blog/signup', Signup),
                                ('/blog/login', Login),
                                ('/blog/logout', Logout),

@@ -8,7 +8,7 @@ from string import letters
 # from rander import render_str, render_post
 from handlers.handler import Handler
 from models.user import User, users_key
-from handlers.userHandlerFunction import login_required
+from handlers.userHandlerFunction import login_required, valid_username,  valid_pwd, valid_email
 
 
 # ## Sign up Handler ##

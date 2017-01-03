@@ -1,7 +1,7 @@
 import webapp2
 import time
 
-from userHandlerFunction import check_secure_val
+from userHandlerFunction import check_secure_val, make_secure_val
 from models.user import User, users_key
 from render import render_str
 
