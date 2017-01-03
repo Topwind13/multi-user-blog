@@ -28,6 +28,20 @@ Multi User Blog is the project which is a part of [Udacity Full Stack Web Develo
 ## HTML and CSS template
 Multi User blog was created by using [clean-blog template](http://startbootstrap.com/template-overviews/clean-blog/), which provided by **[David Miller](http://davidmiller.io/)**, Owner of [Blackrock Digital](http://blackrockdigital.io/).
 
+## Run in localhost
+you need to install [Python](https://www.python.org/downloads/) and [Google App Engine SDK](https://cloud.google.com/appengine/docs/python/download).
+If you've already installed them, clone the repo and run the project
+
+    $ git clone https://github.com/Topwind13/multi-user-blog
+    $ cd multi-user-blog
+    $ dev_appserver.py .
+
+you can visit the application at this URL: http://localhost:8080/.
+
+and access to database at this URL: http://localhost:8000/datastore.
+
+you can quit your localhost: `ctrl+c`
+
 ## Contributor
 **[Topp, Pongsakorn Tikapichart](https://github.com/Topwind13)**
 
