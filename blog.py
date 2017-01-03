@@ -725,7 +725,7 @@ class MainPage(Handler):
     def get(self):
         self.redirect('/blog')
 
-app = webapp2.WSGIApplication([('/', MainPage)
+app = webapp2.WSGIApplication([('/', MainPage),
                                ('/blog/?', BlogPage),
                                ('/blog/newpost', NewPostPage),
                                ('/blog/mypost', MyPostPage),
