@@ -11,7 +11,7 @@ Multi User Blog is the project which is a part of [Udacity Full Stack Web Develo
 * Goole App Engine
 
 ## Features
-* [live version](https://multi-user-blog-154506.appspot.com/blog)
+* [live version](https://multi-user-blog-154507.appspot.com/blog)
 * Front page that lists blog posts.
 * A form to submit new entries.
 * Blog posts have their own page.
@@ -33,4 +33,4 @@ Multi User blog was created by using [clean-blog template](http://startbootstrap
 
 ## Copyright and License
 
-Copyright 2017 Blackrock Digital LLC. Code released under the [MIT]() license.
+Copyright 2017 MultiUserBlog By TOPP.  Code released under the [MIT](https://github.com/Topwind13/multi-user-blog/blob/master/LICENSE) license.
