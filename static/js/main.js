@@ -17,7 +17,7 @@ $(function(){
 // add event listener to show delete conformation box when click delete button
 $(function(){
   $(".btn-delete").click(function(event){
-    if (!confirm('Are you sure?')) {
+    if (!confirm('Are you sure to delete this?\n\nYou cannot retrieve this after click OK')) {
       event.preventDefault();
     }
   });
